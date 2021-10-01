@@ -124,7 +124,7 @@ class ImpersonationCommands(vbu.Cog):
         for i in convo:
             if i[0] == 0:
                 await webhook.send(
-                    content=i[1].format(first_user.display_name),
+                    content=i[1].format(second_user.display_name),
                     username=first_user.display_name,
                     avatar_url=first_user.avatar.url,
                     allowed_mentions=discord.AllowedMentions(
@@ -133,7 +133,7 @@ class ImpersonationCommands(vbu.Cog):
                 )
             else:
                 await webhook.send(
-                    content=i[1].format(second_user.display_name),
+                    content=i[1].format(first_user.display_name),
                     username=second_user.display_name,
                     avatar_url=second_user.avatar.url,
                     allowed_mentions=discord.AllowedMentions(
