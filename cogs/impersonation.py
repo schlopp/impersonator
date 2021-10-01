@@ -1,3 +1,4 @@
+import asyncio
 import random
 
 import discord
@@ -139,6 +140,7 @@ class ImpersonationCommands(vbu.Cog):
                         everyone=False, users=False, roles=False, replied_user=False
                     ),
                 )
+            await asyncio.sleep(1)
 
         await ctx.interaction.response.send_message(":eyes:")
 
