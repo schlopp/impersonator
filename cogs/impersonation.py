@@ -94,7 +94,7 @@ class ImpersonationCommands(vbu.Cog):
         """
 
         if not isinstance(ctx, commands.SlashContext):
-            return await ctx.send("Please use the slash command `/say`.")
+            return await ctx.send("Please use the slash command `/convo`.")
 
         if not isinstance(ctx.channel, discord.TextChannel):
             return await ctx.interaction.response.send_message(
