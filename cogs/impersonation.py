@@ -68,7 +68,12 @@ class ImpersonationCommands(vbu.Cog):
             self._webhook_cache[channel.id] = webhook
 
         await webhook.send(
-            content=message, username=user.display_name, avatar_url=user.avatar.url
+            content=message,
+            username=user.display_name,
+            avatar_url=user.avatar.url,
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False, users=False, roles=False, replied_user=False
+            ),
         )
 
         await ctx.interaction.response.send_message("Done :D", ephemeral=True)
@@ -121,12 +126,18 @@ class ImpersonationCommands(vbu.Cog):
                     content=i[1].format(first_user.display_name),
                     username=first_user.display_name,
                     avatar_url=first_user.avatar.url,
+                    allowed_mentions=discord.AllowedMentions(
+                        everyone=False, users=False, roles=False, replied_user=False
+                    ),
                 )
             else:
                 await webhook.send(
                     content=i[1].format(second_user.display_name),
                     username=second_user.display_name,
                     avatar_url=second_user.avatar.url,
+                    allowed_mentions=discord.AllowedMentions(
+                        everyone=False, users=False, roles=False, replied_user=False
+                    ),
                 )
 
         await ctx.interaction.response.send_message("Done :D", ephemeral=True)
