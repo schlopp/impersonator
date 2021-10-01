@@ -101,6 +101,8 @@ class ImpersonationCommands(vbu.Cog):
             return await ctx.interaction.response.send_message(
                 "This command can only be used in text channels"
             )
+        
+        await ctx.interaction.response.defer()
 
         channel: discord.TextChannel = ctx.channel
 
