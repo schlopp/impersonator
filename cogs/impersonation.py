@@ -37,7 +37,7 @@ class ImpersonationCommands(vbu.Cog):
                     webhook = i
                     break
             else:
-                avatar = await user.avatar.read()
+                avatar = await ctx.guild.me.avatar.read()
                 webhook: discord.Webhook = await channel.create_webhook(
                     name="impersonator",
                     avatar=avatar,
