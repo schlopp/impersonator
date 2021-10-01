@@ -101,7 +101,7 @@ class ImpersonationCommands(vbu.Cog):
             return await ctx.interaction.response.send_message(
                 "This command can only be used in text channels"
             )
-        
+
         await ctx.interaction.response.defer()
 
         channel: discord.TextChannel = ctx.channel
@@ -144,7 +144,7 @@ class ImpersonationCommands(vbu.Cog):
                 )
             await asyncio.sleep(1)
 
-        await ctx.interaction.response.send_message(":eyes:")
+        await ctx.interaction.followup.send(":eyes:")
 
 
 def setup(bot: vbu.Bot):
