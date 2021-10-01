@@ -102,7 +102,7 @@ class ImpersonationCommands(vbu.Cog):
                 "This command can only be used in text channels"
             )
         
-        await ctx.interaction.response.ack()
+        await ctx.interaction.response.defer()
 
         channel: discord.TextChannel = ctx.channel
 
