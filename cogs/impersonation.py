@@ -76,7 +76,7 @@ class ImpersonationCommands(vbu.Cog):
             ),
         )
 
-        await ctx.interaction.response.send_message("Done :D", ephemeral=True)
+        await ctx.interaction.response.send_message(":eyes:")
 
     @commands.command(name="convo")
     @commands.bot_has_permissions(
@@ -140,7 +140,7 @@ class ImpersonationCommands(vbu.Cog):
                     ),
                 )
 
-        await ctx.interaction.response.send_message("Done :D", ephemeral=True)
+        await ctx.interaction.response.send_message(":eyes:")
 
 
 def setup(bot: vbu.Bot):
