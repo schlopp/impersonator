@@ -5,6 +5,8 @@ import discord
 from discord.ext import commands, vbu
 
 
+ZERO_WIDTH_SPACE = "​"
+
 class ImpersonationCommands(vbu.Cog):
     def __init__(self, bot, logger_name="ImpersonationCommands"):
         super().__init__(bot, logger_name=logger_name)
@@ -77,7 +79,8 @@ class ImpersonationCommands(vbu.Cog):
             ),
         )
 
-        await ctx.interaction.response.send_message(":eyes:")
+        # Zero-width space, to make the emoji appear smaller
+        await ctx.interaction.response.send_message(f":eyes:{ZERO_WIDTH_SPACE}")
 
     @commands.command(name="convo")
     @commands.bot_has_permissions(
