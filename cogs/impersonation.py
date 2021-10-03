@@ -147,7 +147,8 @@ class ImpersonationCommands(vbu.Cog):
                 )
             await asyncio.sleep(1)
 
-        await ctx.interaction.followup.send(":eyes:")
+        # Zero-width space, to make the emoji appear smaller
+        await ctx.interaction.response.send_message(f":eyes:{ZERO_WIDTH_SPACE}")
 
 
 def setup(bot: vbu.Bot):
