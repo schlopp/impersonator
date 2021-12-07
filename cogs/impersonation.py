@@ -132,9 +132,7 @@ class ImpersonationCommands(vbu.Cog):
                     content=i[1].format(second_user.display_name),
                     username=first_user.display_name,
                     avatar_url=first_user.avatar.url,
-                    allowed_mentions=discord.AllowedMentions(
-                        everyone=False, users=False, roles=False, replied_user=False
-                    ),
+                    allowed_mentions=discord.AllowedMentions.none(),
                 )
             else:
                 await webhook.send(
