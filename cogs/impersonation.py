@@ -1,17 +1,19 @@
 import asyncio
 import random
+from typing import List, Dict, Tuple
 
-import discord
-from discord.ext import commands, vbu
+import discord  # type: ignore
+from discord.ext import commands, vbu  # type: ignore
 
 
 ZERO_WIDTH_SPACE = "​"
 
+
 class ImpersonationCommands(vbu.Cog):
-    def __init__(self, bot, logger_name="ImpersonationCommands"):
-        super().__init__(bot, logger_name=logger_name)
-        self._webhook_cache = {}
-        self._convos = [
+    def __init__(self, bot: vbu.Bot):
+        super().__init__(bot)
+        self._webhook_cache: Dict[int, discord.Webhook] = {}
+        self._convos: List[List[Tuple[int, str]]] = [
             [
                 (0, "{}..."),
                 (1, "What's up?"),
@@ -37,13 +39,14 @@ class ImpersonationCommands(vbu.Cog):
                 (1, "\*sucks on {} toes\*"),
                 (0, "\*moans\*"),
             ],
-        ] 
+        ]
 
     @commands.command(name="say")
     @commands.bot_has_permissions(
         send_messages=True, embed_links=True, manage_webhooks=True
     )
     @commands.guild_only()
+    @commands.is_slash_command()
     async def _say_command(
         self, ctx: commands.SlashContext, user: discord.Member, *, message: str
     ):
@@ -51,36 +54,31 @@ class ImpersonationCommands(vbu.Cog):
         Make a user say anything you want!
         """
 
-        if not isinstance(ctx, commands.SlashContext):
-            return await ctx.send("Please use the slash command `/say`.")
-
         if not isinstance(ctx.channel, discord.TextChannel):
             return await ctx.interaction.response.send_message(
-                "This command can only be used in text channels"
+                "This command can only be used in text channels."
             )
 
-        channel: discord.TextChannel = ctx.channel
-
-        if channel.id in self._webhook_cache:
-            webhook = self._webhook_cache[channel.id]
+        if ctx.channel.id in self._webhook_cache:
+            webhook = self._webhook_cache[ctx.channel.id]
         else:
-            for i in await channel.webhooks():
+            for i in await ctx.channel.webhooks():
                 if i.name == "impersonator":
                     webhook = i
                     break
             else:
                 avatar = await ctx.guild.me.avatar.read()
-                webhook: discord.Webhook = await channel.create_webhook(
+                webhook = await ctx.channel.create_webhook(
                     name="impersonator",
                     avatar=avatar,
                     reason="This is used by the impersonator bot.",
                 )
-            self._webhook_cache[channel.id] = webhook
+            self._webhook_cache[ctx.channel.id] = webhook
 
         await webhook.send(
             content=message,
             username=user.display_name,
-            avatar_url=user.avatar.url,
+            avatar_url=user.avatar.url if user.avatar else None,
             allowed_mentions=discord.AllowedMentions(
                 everyone=False, users=False, roles=False, replied_user=False
             ),
@@ -104,52 +102,38 @@ class ImpersonationCommands(vbu.Cog):
         Generate a fake convorsation between two users!
         """
 
-        if not isinstance(ctx, commands.SlashContext):
-            return await ctx.send("Please use the slash command `/convo`.")
-
         if not isinstance(ctx.channel, discord.TextChannel):
             return await ctx.interaction.response.send_message(
-                "This command can only be used in text channels"
+                "This command can only be used in text channels."
             )
 
         await ctx.interaction.response.defer()
 
-        channel: discord.TextChannel = ctx.channel
-
-        if channel.id in self._webhook_cache:
-            webhook = self._webhook_cache[channel.id]
+        if ctx.channel.id in self._webhook_cache:
+            webhook = self._webhook_cache[ctx.channel.id]
         else:
-            for i in await channel.webhooks():
-                if i.name == "impersonator":
-                    webhook = i
+            for webhook in await ctx.channel.webhooks():
+                if webhook.name == "impersonator":
+                    webhook = webhook
                     break
             else:
                 avatar = await ctx.guild.me.avatar.read()
-                webhook: discord.Webhook = await channel.create_webhook(
+                webhook = await ctx.channel.create_webhook(
                     name="impersonator",
                     avatar=avatar,
                     reason="This is used by the impersonator bot.",
                 )
-            self._webhook_cache[channel.id] = webhook
+            self._webhook_cache[ctx.channel.id] = webhook
 
         convo = random.choice(self._convos)
-        for i in convo:
-            if i[0] == 0:
-                await webhook.send(
-                    content=i[1].format(second_user.display_name),
-                    username=first_user.display_name,
-                    avatar_url=first_user.avatar.url,
-                    allowed_mentions=discord.AllowedMentions.none(),
-                )
-            else:
-                await webhook.send(
-                    content=i[1].format(first_user.display_name),
-                    username=second_user.display_name,
-                    avatar_url=second_user.avatar.url,
-                    allowed_mentions=discord.AllowedMentions(
-                        everyone=False, users=False, roles=False, replied_user=False
-                    ),
-                )
+        for convo_user_id, convo_message in convo:
+            convo_user = first_user if not convo_user_id else second_user
+            await webhook.send(
+                content=convo_message.format(second_user.display_name),
+                username=convo_user.display_name,
+                avatar_url=convo_user.avatar.url if convo_user.avatar else None,
+                allowed_mentions=discord.AllowedMentions.none(),
+            )
             await asyncio.sleep(1)
 
         # Zero-width space, to make the emoji appear smaller
