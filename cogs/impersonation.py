@@ -30,7 +30,14 @@ class ImpersonationCommands(vbu.Cog):
                 (1, "\*shits agressively\*"),
                 (0, "Mmmm. Tasty."),
             ],
-        ]
+            [
+                (1, "I am so hungry"),
+                (1, "Can I sprinkle some Doritos powder on your toes please?"),
+                (0, "Sure bro!"),
+                (1, "\*sucks on {} toes\*"),
+                (0, "\*moans\*"),
+            ],
+        ] 
 
     @commands.command(name="say")
     @commands.bot_has_permissions(
