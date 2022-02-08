@@ -46,7 +46,7 @@ class ImpersonationCommands(vbu.Cog):
             webhook = self._webhook_cache[channel.id]
         else:
             for i in await channel.webhooks():
-                if i.name == "impersonator":
+                if i.user == self.bot.user:
                     webhook = i
                     break
             else:
@@ -120,7 +120,7 @@ class ImpersonationCommands(vbu.Cog):
             await asyncio.sleep(1)
 
         # Zero-width space, to make the emoji appear smaller
-        await ctx.interaction.response.send_message(f":eyes:{ZERO_WIDTH_SPACE}")
+        await ctx.interaction.followup.send(f":eyes:{ZERO_WIDTH_SPACE}")
 
 
 def setup(bot: vbu.Bot):
